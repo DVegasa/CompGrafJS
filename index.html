@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<meta charset="UTF-8"/>
+
+<head>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+
+    <title>Халтурин</title>
+
+    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+</head>
+
+<body>
+<div id="root">
+    <h1>Эдуард Халтурин, МОСб-192</h1>
+    <h2>Лаба №0</h2>
+    <canvas height="500" id="c" width="1000"></canvas>
+</div>
+</body>
+</html>
+
+
+<script>
+    const W = 1000;
+    const H = 500;
+
+    // init
+    const myPics = document.getElementById('c');
+    const ctx = myPics.getContext('2d');
+    const iData = ctx.createImageData(W, H)
+    ctx.putImageData(iData, 0, 0)
+    console.log(iData.data.length)
+
+    // edSetPixel(10, 10, 0, 0, 0);
+
+    // test
+    for (let i = 0; i < 100; i++) {
+        edSetPixel(i, i, 255, 0, 0);
+    }
+
+
+    // event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.
+    myPics.addEventListener('mousedown', e => {
+    });
+
+    function edSetPixel(x, y, r, g, b, a = 255) {
+        const i = (W * y * 4 + x * 4);
+        iData.data[i + 0] = r;
+        iData.data[i + 1] = g;
+        iData.data[i + 2] = b;
+        iData.data[i + 3] = a;
+        ctx.putImageData(iData, 0, 0)
+    }
+</script>
+
+
+<style>
+    canvas {
+        width: 1000px;
+        height: 500px;
+        border: 1px solid black;
+    }
+</style>
