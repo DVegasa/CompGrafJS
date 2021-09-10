@@ -25,31 +25,46 @@
     const H = 500;
 
     // init
-    const myPics = document.getElementById('c');
-    const ctx = myPics.getContext('2d');
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
     const iData = ctx.createImageData(W, H)
     ctx.putImageData(iData, 0, 0)
-    console.log(iData.data.length)
+    edSetPixel(200, 200, 255, 0, 0);
 
-    // edSetPixel(10, 10, 0, 0, 0);
+    // // test
+    // for (let i = 0; i < 100; i++) {
+    //     edSetPixel(i, i, 255, 0, 0);
+    // }
 
-    // test
-    for (let i = 0; i < 100; i++) {
-        edSetPixel(i, i, 255, 0, 0);
-    }
-
+    var placedPoints = [];
 
     // event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.
-    myPics.addEventListener('mousedown', e => {
+    canvas.addEventListener('mousedown', e => {
+        console.log('Click at', e.offsetX, e.offsetY);
+        if (e.button === 0) { // ЛКМ
+            edSetPixel(e.offsetX, e.offsetY, 0, 0, 0);
+            placedPoints.push({x: e.offsetX, y: e.offsetY});
+        } else if (e.button === 2) { // ПКМ
+            for (p of placedPoints) {
+                const randR = edGetRandom(0, 255);
+                const randG = edGetRandom(0, 255);
+                const randB = edGetRandom(0, 255);
+                edSetPixel(p.x, p.y, randR, randG, randB);
+            }
+        }
     });
 
     function edSetPixel(x, y, r, g, b, a = 255) {
-        const i = (W * y * 4 + x * 4);
+        const i = (W * y + x)*4;
         iData.data[i + 0] = r;
         iData.data[i + 1] = g;
         iData.data[i + 2] = b;
         iData.data[i + 3] = a;
         ctx.putImageData(iData, 0, 0)
+    }
+
+    function edGetRandom(min, max) {
+        return Math.random() * (max - min) + min;
     }
 </script>
 
