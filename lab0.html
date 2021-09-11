@@ -4,15 +4,18 @@
 
 <head>
     <meta content="width=device-width, initial-scale=1" name="viewport">
-
     <title>Халтурин</title>
-
-    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
 </head>
 
 <body>
 <div id="root">
     <h1>Эдуард Халтурин, МОСб-192</h1>
+    <a href="lab0.html">Лаб №0</a>
+    <a href="lab1.html">Лаб №1</a>
+    <a href="lab2.html">Лаб №2</a>
+    <a href="lab3.html">Лаб №3</a>
+    <a href="lab4.html">Лаб №4</a>
+    <a href="lab5.html">Лаб №5</a>
     <h2>Лаба №0</h2>
     <canvas height="500" id="c" width="1000"></canvas>
 </div>
@@ -38,7 +41,6 @@
 
     var placedPoints = [];
 
-    // event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.
     canvas.addEventListener('mousedown', e => {
         console.log('Click at', e.offsetX, e.offsetY);
         if (e.button === 0) { // ЛКМ
