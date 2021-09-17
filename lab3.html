@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<meta charset="UTF-8"/>
+
+<head>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Халтурин</title>
+</head>
+
+<body>
+<div id="root">
+    <h1>Эдуард Халтурин, МОСб-192</h1>
+    <a href="lab0.html">Лаб №0</a>
+    <a href="lab1.html">Лаб №1</a>
+    <a href="lab2.html">Лаб №2</a>
+    <a href="lab3.html">Лаб №3</a>
+    <a href="lab4.html">Лаб №4</a>
+    <a href="lab5.html">Лаб №5</a>
+    <h2>Лаба №3</h2>
+    <canvas height="500" id="c" width="1000"></canvas>
+</div>
+</body>
+</html>
+
+
+<script>
+    const W = 1000;
+    const H = 500;
+
+    // init
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+    var iData = ctx.createImageData(W, H)
+    ctx.putImageData(iData, 0, 0)
+    edSetPixel(200, 200, 255, 0, 0);
+
+    var placedPoints = [];
+
+    let isDrawing = false;
+    let startPoint, endPoint;
+
+    canvas.addEventListener('mousedown', e => {
+        console.log('Click at', e.offsetX, e.offsetY);
+        if (e.button === 0) { // ЛКМ
+            placedPoints.push({x: e.offsetX, y: e.offsetY});
+            const l = placedPoints.length;
+            if (l > 1) {
+                edDrawLine(
+                        placedPoints[l-1].x,
+                        placedPoints[l-1].y,
+                        placedPoints[l-2].x,
+                        placedPoints[l-2].y,
+                        255
+                );
+            }
+        } else if (e.button === 2) { // ПКМ
+            isDrawing = true;
+            startPoint = {x: e.offsetX, y: e.offsetY};
+            endPoint = null;
+        }
+    });
+
+    canvas.addEventListener('mouseup', e => {
+        if (e.button === 2) { // ЛКМ
+            console.log('mouseup');
+            isDrawing = false;
+            endPoint = {x: e.offsetX, y: e.offsetY};
+            edDrawLine(startPoint.x, startPoint.y, endPoint.x, startPoint.y);
+            edDrawLine(startPoint.x, startPoint.y, startPoint.x, endPoint.y);
+            edDrawLine(endPoint.x, endPoint.y, endPoint.x, startPoint.y);
+            edDrawLine(endPoint.x, endPoint.y, startPoint.x, endPoint.y);
+        }
+    })
+
+    function edDrawLine(x0, y0, x1, y1, r=0, g=0, b=0, a=255) {
+        let A, B, sign;
+        A = y1 - y0;
+        B = x0 - x1;
+        if (Math.abs(A) > Math.abs(B)) sign = 1;
+        else sign = -1;
+        let signA, signB;
+
+        if (A < 0) signA = -1;
+        else signA = 1;
+        if (B < 0) signB = -1;
+        else signB = 1;
+
+        let f = 0;
+        edSetPixel(x0, y0, r, g, b, a);
+        let x = x0, y = y0;
+        if (sign === -1) {
+            do {
+                f += A*signA;
+                if (f > 0) {
+                    f -= B*signB;
+                    y += signA;
+                }
+                x -= signB;
+                edSetPixel(x, y, r, g, b, a);
+            } while (x !== x1 || y !== y1);
+        } else {
+            do {
+                f += B*signB;
+                if (f > 0) {
+                    f -= A*signA;
+                    x -= signB;
+                }
+                y += signA;
+                edSetPixel(x, y, r, g, b, a);
+            } while (x !== x1 || y !== y1);
+        }
+    }
+
+    function edSetPixel(x, y, r, g, b, a = 255) {
+        const i = (W * y + x)*4;
+        iData.data[i + 0] = r;
+        iData.data[i + 1] = g;
+        iData.data[i + 2] = b;
+        iData.data[i + 3] = a;
+        ctx.putImageData(iData, 0, 0)
+    }
+
+    function edGetRandom(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+</script>
+
+
+<style>
+    canvas {
+        width: 1000px;
+        height: 500px;
+        border: 1px solid black;
+    }
+</style>

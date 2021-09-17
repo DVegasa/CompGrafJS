@@ -67,27 +67,38 @@
             edDrawLine(startPoint.x, startPoint.y, startPoint.x, endPoint.y);
             edDrawLine(endPoint.x, endPoint.y, endPoint.x, startPoint.y);
             edDrawLine(endPoint.x, endPoint.y, startPoint.x, endPoint.y);
-            let center = {
-                x: Math.round((startPoint.x + endPoint.x) / 2),
-                y: Math.round((startPoint.y + endPoint.y) / 2)
-            };
             let lengths = {
-                a: Math.round(Math.abs(endPoint.x - startPoint.x) / 2),
-                b: Math.round(Math.abs(endPoint.y - startPoint.y) / 2)
+                a: Math.floor(Math.abs(endPoint.x - startPoint.x) / 2),
+                b: Math.floor(Math.abs(endPoint.y - startPoint.y) / 2)
             }
+            // let center = {
+            //     x: Math.floor((startPoint.x + endPoint.x) / 2),
+            //     y: Math.floor((startPoint.y + endPoint.y) / 2)
+            // };
+            let center = {
+                x: Math.max(startPoint.x, endPoint.x) - lengths.a,
+                y: Math.max(startPoint.y, endPoint.y) - lengths.b
+            };
+            console.log('startPoint.x + endPoint.x', startPoint.x + endPoint.x);
+            console.log('startPoint.y + endPoint.y', startPoint.y + endPoint.y);
+            console.log('endPoint.x - startPoint.x', endPoint.x - startPoint.x);
+            console.log('endPoint.y - startPoint.y', endPoint.y - startPoint.y);
+            console.log('center', center);
+            console.log('lengths', lengths);
             edDrawEllipse(center.x, center.y, lengths.a, lengths.b);
         }
     })
 
     function edDrawEllipse(x, y, a, b) {
         console.log('drawEllipse', x, y, a, b);
+        a -= 1;
         let _x = 0;
         let _y = b;
         let a_sqr = a * a;
         let b_sqr = b * b;
         let delta = 4 * b_sqr * ((_x + 1) * (_x + 1)) + a_sqr * ((2 * _y - 1) * (2 * _y - 1)) - 4 * a_sqr * b_sqr;
         while (a_sqr * (2 * _y - 1) > 2 * b_sqr * (_x + 1)) {
-            edSetPixel(x + _x, y + _y, 255, 0, 0);
+            edSetPixel(x + _x, y + _y, 255, 255, 0);
             edSetPixel(x + _x, y - _y, 0, 255, 0);
             edSetPixel(x - _x, y - _y, 0, 0, 255);
             edSetPixel(x - _x, y + _y, 0, 0, 0);
@@ -101,6 +112,7 @@
             }
         }
         delta = b_sqr * ((2 * _x + 1) * (2 * _x + 1)) + 4 * a_sqr * ((_y + 1) * (_y + 1)) - 4 * a_sqr * b_sqr;
+        console.log('delta', delta);
         while (_y + 1 !== 0) {
             edSetPixel(x + _x, y + _y, 255, 0, 0);
             edSetPixel(x + _x, y - _y, 0, 255, 0);
